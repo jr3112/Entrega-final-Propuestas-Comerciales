@@ -55,7 +55,7 @@ README.md
 
 - **Base de datos (solo lectura):** (https://airtable.com/invite/l?inviteId=invwY3FMpfxV8GIgm&inviteToken=d04258dd38657830364ccfe1f1e06f0dd2fac675f8b06ef627cef21f734e77fd&utm_medium=email&utm_source=product_team&utm_content=transactional-alerts)
 - **Dashboard de control (KPIs y tasa de errores):** (https://airtable.com/appDmqPjgNSuIIEde/shrat8Jm0OatzNk2y)
-- **Video demo (3 min):** (https://youtu.be/0eIby_jvkqI)
+- **Video demo (3 min):** (https://drive.google.com/file/d/1v0_nC_awOz2Q25VDQ4i0AHNNfDLAGIVG/view?usp=drive_link)
 
 ---
 
