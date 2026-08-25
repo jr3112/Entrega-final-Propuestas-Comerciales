@@ -1,0 +1,3060 @@
+{
+    "name": "Escenario 1",
+    "flow": [
+        {
+            "id": 2,
+            "module": "airtable:TriggerWatchRecords",
+            "version": 3,
+            "parameters": {
+                "base": "appDmqPjgNSuIIEde",
+                "view": "",
+                "table": "tblsAiKc8odlUUeqQ",
+                "config": {
+                    "labelField": "Descipcion del proyecto",
+                    "triggerField": "Fecha de creación"
+                },
+                "formula": "{Estado} = \"Pendiente\"",
+                "maxRecords": 10,
+                "__IMTCONN__": 10177737,
+                "useColumnId": false
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 300
+                },
+                "restore": {
+                    "parameters": {
+                        "base": {
+                            "label": "PROPUESTAS COMERCIALES"
+                        },
+                        "view": {
+                            "label": "Empty"
+                        },
+                        "table": {
+                            "label": "propuestas"
+                        },
+                        "config": {
+                            "nested": {
+                                "labelField": {
+                                    "label": "Descipcion del proyecto"
+                                },
+                                "triggerField": {
+                                    "label": "Fecha de creación"
+                                }
+                            }
+                        },
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "airtable2"
+                            },
+                            "label": "Juan's Airtable Token or Key connection"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:airtable3,airtable2",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "base",
+                        "type": "select",
+                        "label": "Base",
+                        "required": true
+                    },
+                    {
+                        "name": "useColumnId",
+                        "type": "boolean",
+                        "label": "Use Column ID",
+                        "required": true
+                    },
+                    {
+                        "name": "table",
+                        "type": "select",
+                        "label": "Table",
+                        "required": true
+                    },
+                    {
+                        "name": "config",
+                        "spec": [
+                            {
+                                "name": "triggerField",
+                                "type": "select",
+                                "label": "Trigger field",
+                                "required": true
+                            },
+                            {
+                                "name": "triggerField",
+                                "type": "hidden"
+                            },
+                            {
+                                "name": "labelField",
+                                "type": "select",
+                                "label": "Label field",
+                                "required": true
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Trigger configuration"
+                    },
+                    {
+                        "name": "maxRecords",
+                        "type": "integer",
+                        "label": "Limit",
+                        "required": true
+                    },
+                    {
+                        "name": "view",
+                        "type": "select",
+                        "label": "View"
+                    },
+                    {
+                        "name": "formula",
+                        "type": "text",
+                        "label": "Formula"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "createdTime",
+                        "type": "date",
+                        "label": "Created Time"
+                    },
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "label": "Name"
+                    },
+                    {
+                        "name": "Clientes",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Clientes"
+                    },
+                    {
+                        "name": "CATALOGO DE SERVICIOS",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "CATALOGO DE SERVICIOS"
+                    },
+                    {
+                        "name": "Descipcion del proyecto",
+                        "type": "text",
+                        "label": "Descipcion del proyecto",
+                        "multiline": true
+                    },
+                    {
+                        "name": "Estado",
+                        "type": "text",
+                        "label": "Estado"
+                    },
+                    {
+                        "name": "Propuesta generada",
+                        "type": "text",
+                        "label": "Propuesta generada",
+                        "multiline": true
+                    },
+                    {
+                        "name": "Thread ID",
+                        "type": "text",
+                        "label": "Thread ID"
+                    },
+                    {
+                        "name": "Fecha de creación",
+                        "type": "date",
+                        "label": "Fecha de creación"
+                    },
+                    {
+                        "name": "LOG DE ERRORES",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "LOG DE ERRORES"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 300
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 5,
+                            "module": "openai-gpt-3:CreateCompletion",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 10182947
+                            },
+                            "filter": {
+                                "name": "Datos completos",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{2.`Descipcion del proyecto`}}",
+                                            "o": "exist"
+                                        },
+                                        {
+                                            "a": "{{2.`CATALOGO DE SERVICIOS`}}",
+                                            "o": "exist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "model": "gpt-4o-mini",
+                                "top_p": "1",
+                                "select": "chat",
+                                "messages": [
+                                    {
+                                        "role": "system",
+                                        "content": "Sos un asesor comercial senior. Redactá propuestas comerciales personalizadas, cálidas pero profesionales, basadas Únicamente en los datos que se te proveen. Nunca inventes precios, plazos o servicios que no estén en los datos. Si falta un dato importante, escribí la propuesta igual pero indicá qué información falta. Tono profesional y cercano. Máximo 300 palabras. Devolvé solo el texto de la propuesta, sin comentarios adicionales ni markdown."
+                                    },
+                                    {
+                                        "role": "user",
+                                        "content": "Genera una propuesta comercial con esta estructura exacta: 1. Saludo personalizado 2. Entendimiento del problema del cliente 3. Alcance del servicio propuesto 4. Inversion estimada 5. Proximos pasos\n\nDatos del cliente\nNombre:{{2.`Lookup para el Nombre del cliente`}}\nEmpresa: {{2.`Lookup para Empresa`}}\nIndustria: {{2.`Lookup para Industria`}}\nServicio Solicitado: {{2.`Lookup para el Nombre del servicio`}}\nDescripción: {{2.` Lookup para Descripcion del servicio`}}\nPrecio Base: {{2.`Lookup para Precio`}}\nNecesidades del cliente: \"{{2.`Descipcion del proyecto`}}\"\n Devolve SOLO el texto de la propuesta, sin comentarios adicionales, sin markdown, listo para pegar en un email.",
+                                        "imageDetail": "auto"
+                                    }
+                                ],
+                                "max_tokens": "500",
+                                "temperature": "1",
+                                "n_completions": "1",
+                                "response_format": "text"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 150
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "stop": {
+                                            "mode": "chose"
+                                        },
+                                        "model": {
+                                            "mode": "chose",
+                                            "label": "gpt-4o-mini (system)Fast, affordable small model for focused tasks"
+                                        },
+                                        "select": {
+                                            "label": "Create a Chat Completion (GPT and o1 models)"
+                                        },
+                                        "messages": {
+                                            "mode": "chose",
+                                            "items": [
+                                                {
+                                                    "role": {
+                                                        "mode": "chose",
+                                                        "label": "Developer / System"
+                                                    }
+                                                },
+                                                {
+                                                    "role": {
+                                                        "mode": "chose",
+                                                        "label": "User"
+                                                    },
+                                                    "imageDetail": {
+                                                        "mode": "chose",
+                                                        "label": "Auto"
+                                                    },
+                                                    "imageInputType": {
+                                                        "mode": "chose",
+                                                        "label": "Empty"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "logit_bias": {
+                                            "mode": "chose"
+                                        },
+                                        "tool_choice": {
+                                            "mode": "chose",
+                                            "label": "Empty"
+                                        },
+                                        "response_format": {
+                                            "mode": "chose",
+                                            "label": "Text"
+                                        },
+                                        "additionalParameters": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "openai-gpt-3"
+                                            },
+                                            "label": "Juan's OpenAI connection"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:openai-gpt-3",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "select",
+                                        "type": "select",
+                                        "label": "Select Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "chat",
+                                                "prompt"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "temperature",
+                                        "type": "number",
+                                        "label": "Temperature",
+                                        "validate": {
+                                            "max": 2,
+                                            "min": 0
+                                        }
+                                    },
+                                    {
+                                        "name": "top_p",
+                                        "type": "number",
+                                        "label": "Top P",
+                                        "validate": {
+                                            "max": 1,
+                                            "min": 0
+                                        }
+                                    },
+                                    {
+                                        "name": "n_completions",
+                                        "type": "number",
+                                        "label": "Number"
+                                    },
+                                    {
+                                        "name": "frequency_penalty",
+                                        "type": "number",
+                                        "label": "Frequency Penalty",
+                                        "validate": {
+                                            "max": 2,
+                                            "min": -2
+                                        }
+                                    },
+                                    {
+                                        "name": "presence_penalty",
+                                        "type": "number",
+                                        "label": "Presence Penalty",
+                                        "validate": {
+                                            "max": 2,
+                                            "min": -2
+                                        }
+                                    },
+                                    {
+                                        "name": "logit_bias",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "token",
+                                                    "type": "text",
+                                                    "label": "Token ID",
+                                                    "required": true
+                                                },
+                                                {
+                                                    "name": "probability",
+                                                    "type": "number",
+                                                    "label": "Probability",
+                                                    "required": true,
+                                                    "validate": {
+                                                        "max": 100,
+                                                        "min": -100
+                                                    }
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Token Probability"
+                                        },
+                                        "type": "array",
+                                        "label": "Token Probability"
+                                    },
+                                    {
+                                        "name": "seed",
+                                        "type": "integer",
+                                        "label": "Seed"
+                                    },
+                                    {
+                                        "name": "tool_choice",
+                                        "type": "select",
+                                        "label": "Tool Choice",
+                                        "validate": {
+                                            "enum": [
+                                                "none",
+                                                "auto",
+                                                "required"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "stop",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "text",
+                                            "label": "Stop Sequence"
+                                        },
+                                        "type": "array",
+                                        "label": "Stop Sequences",
+                                        "validate": {
+                                            "maxItems": 4
+                                        }
+                                    },
+                                    {
+                                        "name": "additionalParameters",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "key",
+                                                    "type": "text",
+                                                    "label": "Parameter Name",
+                                                    "required": true
+                                                },
+                                                {
+                                                    "name": "type",
+                                                    "type": "select",
+                                                    "label": "Input Type",
+                                                    "options": [
+                                                        {
+                                                            "label": "Text",
+                                                            "value": "text",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "text",
+                                                                    "label": "Parameter Value"
+                                                                }
+                                                            ],
+                                                            "default": true
+                                                        },
+                                                        {
+                                                            "label": "Number",
+                                                            "value": "number",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "number",
+                                                                    "label": "Parameter Value"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "label": "Boolean",
+                                                            "value": "boolean",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "boolean",
+                                                                    "label": "Parameter Value"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "label": "Date",
+                                                            "value": "date",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "date",
+                                                                    "label": "Parameter Value"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "label": "Any",
+                                                            "value": "any",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "any",
+                                                                    "label": "Parameter Value"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Input Parameter"
+                                        },
+                                        "type": "array",
+                                        "label": "Other Input Parameters"
+                                    },
+                                    {
+                                        "name": "model",
+                                        "type": "select",
+                                        "label": "Model",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "max_tokens",
+                                        "type": "uinteger",
+                                        "label": "Max Output Tokens"
+                                    },
+                                    {
+                                        "name": "messages",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "role",
+                                                    "type": "select",
+                                                    "label": "Role",
+                                                    "options": {
+                                                        "store": [
+                                                            {
+                                                                "label": "User",
+                                                                "value": "user",
+                                                                "nested": [
+                                                                    {
+                                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                                        "name": "content",
+                                                                        "type": "text",
+                                                                        "label": "Text Content"
+                                                                    },
+                                                                    {
+                                                                        "name": "imageInputType",
+                                                                        "type": "select",
+                                                                        "label": "Image Input Type",
+                                                                        "options": [
+                                                                            {
+                                                                                "label": "URL",
+                                                                                "value": "url",
+                                                                                "nested": [
+                                                                                    {
+                                                                                        "help": "Make sure to use a publicly accessible URL.\nYou can test if your image is publicly accessible by opening the link in an incognito tab.",
+                                                                                        "name": "imageUrl",
+                                                                                        "type": "url",
+                                                                                        "label": "Image URL"
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            {
+                                                                                "label": "Image File",
+                                                                                "value": "file",
+                                                                                "nested": [
+                                                                                    {
+                                                                                        "name": "imageFile",
+                                                                                        "spec": [
+                                                                                            {
+                                                                                                "help": "Accepted extensions: `.jpg`, `.jpeg`, `.png`, `.webp` and `.gif`.",
+                                                                                                "name": "imageFilename",
+                                                                                                "type": "filename",
+                                                                                                "label": "Image Filename",
+                                                                                                "semantic": "file:name",
+                                                                                                "extension": [
+                                                                                                    "jpg",
+                                                                                                    "jpeg",
+                                                                                                    "png",
+                                                                                                    "webp",
+                                                                                                    "gif"
+                                                                                                ]
+                                                                                            },
+                                                                                            {
+                                                                                                "name": "imageData",
+                                                                                                "type": "buffer",
+                                                                                                "label": "Image Data",
+                                                                                                "semantic": "file:data"
+                                                                                            }
+                                                                                        ],
+                                                                                        "type": "collection",
+                                                                                        "label": "Image"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ],
+                                                                        "mappable": false
+                                                                    },
+                                                                    {
+                                                                        "help": "Recommended value: `Auto`",
+                                                                        "name": "imageDetail",
+                                                                        "type": "select",
+                                                                        "label": "Image Detail",
+                                                                        "options": [
+                                                                            {
+                                                                                "label": "Auto",
+                                                                                "value": "auto",
+                                                                                "default": true
+                                                                            },
+                                                                            {
+                                                                                "label": "High",
+                                                                                "value": "high"
+                                                                            },
+                                                                            {
+                                                                                "label": "Low",
+                                                                                "value": "low"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ],
+                                                                "default": true
+                                                            },
+                                                            {
+                                                                "label": "Assistant",
+                                                                "value": "assistant",
+                                                                "nested": [
+                                                                    {
+                                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                                        "name": "content",
+                                                                        "type": "text",
+                                                                        "label": "Text Content"
+                                                                    },
+                                                                    {
+                                                                        "mode": "edit",
+                                                                        "name": "tool_calls",
+                                                                        "spec": {
+                                                                            "spec": [
+                                                                                {
+                                                                                    "name": "type",
+                                                                                    "type": "hidden",
+                                                                                    "default": "function"
+                                                                                },
+                                                                                {
+                                                                                    "help": "Map this directly from the output of a previous **Create a Completion** module. Look for `Choices[]: Message.Tool Calls[]: ID`.",
+                                                                                    "name": "id",
+                                                                                    "type": "text",
+                                                                                    "label": "Tool call ID"
+                                                                                },
+                                                                                {
+                                                                                    "name": "function",
+                                                                                    "spec": [
+                                                                                        {
+                                                                                            "help": "The name of the function previously called.",
+                                                                                            "name": "name",
+                                                                                            "type": "text",
+                                                                                            "label": "Name",
+                                                                                            "required": true
+                                                                                        },
+                                                                                        {
+                                                                                            "help": "The arguments previously output by the AI.",
+                                                                                            "name": "arguments",
+                                                                                            "type": "text",
+                                                                                            "label": "Arguments",
+                                                                                            "required": true
+                                                                                        }
+                                                                                    ],
+                                                                                    "type": "collection",
+                                                                                    "label": "Function"
+                                                                                }
+                                                                            ],
+                                                                            "type": "collection",
+                                                                            "label": "Tool Call"
+                                                                        },
+                                                                        "type": "array",
+                                                                        "label": "Tool Calls",
+                                                                        "labels": {
+                                                                            "add": "Add tool call"
+                                                                        },
+                                                                        "mappable": {
+                                                                            "help": "You can map the entire `Choices[]: Message.Tool Calls` array from a previous Create a Completion module here."
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "label": "Developer / System",
+                                                                "value": "system",
+                                                                "nested": [
+                                                                    {
+                                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                                        "name": "content",
+                                                                        "type": "text",
+                                                                        "label": "Text Content"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "label": "Tool",
+                                                                "value": "tool",
+                                                                "nested": [
+                                                                    {
+                                                                        "help": "The return of the function. This role should only be used when you have processed a previous function call and want to send the output of the function execution back to the AI.",
+                                                                        "name": "content",
+                                                                        "type": "text",
+                                                                        "label": "Text Content",
+                                                                        "required": true
+                                                                    },
+                                                                    {
+                                                                        "help": "Map this directly from the output of a previous **Create a Completion** module. Look for `Choices[]: Message.Tool Calls[]: ID`.",
+                                                                        "name": "tool_call_id",
+                                                                        "type": "text",
+                                                                        "label": "Tool Call ID.",
+                                                                        "required": true
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "required": true
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Message"
+                                        },
+                                        "type": "array",
+                                        "label": "Messages",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "response_format",
+                                        "type": "select",
+                                        "label": "Response Format",
+                                        "validate": {
+                                            "enum": [
+                                                "text",
+                                                "json_object"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "prediction",
+                                        "type": "text",
+                                        "label": "Predicted Outputs"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "result",
+                                        "type": "any",
+                                        "label": "Result"
+                                    },
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "object",
+                                        "type": "text",
+                                        "label": "Object"
+                                    },
+                                    {
+                                        "name": "created",
+                                        "type": "date",
+                                        "label": "Created"
+                                    },
+                                    {
+                                        "name": "model",
+                                        "type": "text",
+                                        "label": "Model"
+                                    },
+                                    {
+                                        "name": "choices",
+                                        "spec": [
+                                            {
+                                                "name": "text",
+                                                "type": "text",
+                                                "label": "Text"
+                                            },
+                                            {
+                                                "name": "index",
+                                                "type": "number",
+                                                "label": "Index"
+                                            },
+                                            {
+                                                "name": "logprobs",
+                                                "type": "text",
+                                                "label": "Log Probs"
+                                            },
+                                            {
+                                                "name": "finish_reason",
+                                                "type": "text",
+                                                "label": "Finish Reason"
+                                            },
+                                            {
+                                                "name": "message",
+                                                "spec": [
+                                                    {
+                                                        "name": "role",
+                                                        "type": "text",
+                                                        "label": "Role"
+                                                    },
+                                                    {
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Content"
+                                                    },
+                                                    {
+                                                        "name": "tool_calls",
+                                                        "spec": [
+                                                            {
+                                                                "name": "id",
+                                                                "type": "text",
+                                                                "label": "ID"
+                                                            },
+                                                            {
+                                                                "name": "type",
+                                                                "type": "text",
+                                                                "label": "Type"
+                                                            },
+                                                            {
+                                                                "name": "function",
+                                                                "spec": [
+                                                                    {
+                                                                        "name": "name",
+                                                                        "type": "text",
+                                                                        "label": "Name"
+                                                                    },
+                                                                    {
+                                                                        "name": "arguments",
+                                                                        "type": "text",
+                                                                        "label": "Arguments"
+                                                                    }
+                                                                ],
+                                                                "type": "collection",
+                                                                "label": "Function"
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Tool Calls"
+                                                    },
+                                                    {
+                                                        "name": "refusal",
+                                                        "type": "text",
+                                                        "label": "Refusal"
+                                                    },
+                                                    {
+                                                        "name": "annotations",
+                                                        "spec": [
+                                                            {
+                                                                "name": "type",
+                                                                "type": "text",
+                                                                "label": "Type"
+                                                            },
+                                                            {
+                                                                "name": "url_citation",
+                                                                "spec": [
+                                                                    {
+                                                                        "name": "end_index",
+                                                                        "type": "number",
+                                                                        "label": "End Index"
+                                                                    },
+                                                                    {
+                                                                        "name": "start_index",
+                                                                        "type": "number",
+                                                                        "label": "Start Index"
+                                                                    },
+                                                                    {
+                                                                        "name": "title",
+                                                                        "type": "text",
+                                                                        "label": "Title"
+                                                                    },
+                                                                    {
+                                                                        "name": "url",
+                                                                        "type": "text",
+                                                                        "label": "URL"
+                                                                    }
+                                                                ],
+                                                                "type": "collection",
+                                                                "label": "URL Citation"
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Annotations"
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Message"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Choices"
+                                    },
+                                    {
+                                        "name": "usage",
+                                        "spec": [
+                                            {
+                                                "name": "prompt_tokens",
+                                                "type": "number",
+                                                "label": "Prompt Tokens"
+                                            },
+                                            {
+                                                "name": "completion_tokens",
+                                                "type": "text",
+                                                "label": "Completion Tokens"
+                                            },
+                                            {
+                                                "name": "total_tokens",
+                                                "type": "number",
+                                                "label": "Total Tokens"
+                                            },
+                                            {
+                                                "name": "prompt_tokens_details",
+                                                "spec": [
+                                                    {
+                                                        "name": "cached_tokens",
+                                                        "type": "uinteger",
+                                                        "label": "Cached Tokens"
+                                                    },
+                                                    {
+                                                        "name": "text_tokens",
+                                                        "type": "uinteger",
+                                                        "label": "Text Tokens"
+                                                    },
+                                                    {
+                                                        "name": "image_tokens",
+                                                        "type": "uinteger",
+                                                        "label": "Image Tokens"
+                                                    },
+                                                    {
+                                                        "name": "audio_tokens",
+                                                        "type": "uinteger",
+                                                        "label": "Audio Tokens"
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Prompt Tokens Details"
+                                            },
+                                            {
+                                                "name": "completion_tokens_details",
+                                                "spec": [
+                                                    {
+                                                        "name": "reasoning_tokens",
+                                                        "type": "uinteger",
+                                                        "label": "Reasoning Tokens"
+                                                    },
+                                                    {
+                                                        "name": "text_tokens",
+                                                        "type": "uinteger",
+                                                        "label": "Text Tokens"
+                                                    },
+                                                    {
+                                                        "name": "audio_tokens",
+                                                        "type": "uinteger",
+                                                        "label": "Audio Tokens"
+                                                    },
+                                                    {
+                                                        "name": "accepted_prediction_tokens",
+                                                        "type": "uinteger",
+                                                        "label": "Accepted Prediction Tokens"
+                                                    },
+                                                    {
+                                                        "name": "rejected_prediction_tokens",
+                                                        "type": "uinteger",
+                                                        "label": "Rejected Prediction Tokens"
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Completion Tokens Details"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Usage"
+                                    },
+                                    {
+                                        "name": "service_tier",
+                                        "type": "text",
+                                        "label": "Service Tier"
+                                    },
+                                    {
+                                        "name": "system_fingerprint",
+                                        "type": "text",
+                                        "label": "System Fingerprint"
+                                    }
+                                ]
+                            },
+                            "onerror": [
+                                {
+                                    "id": 12,
+                                    "module": "airtable:ActionUpdateRecords",
+                                    "version": 3,
+                                    "parameters": {
+                                        "__IMTCONN__": 10177737
+                                    },
+                                    "mapper": {
+                                        "id": "{{2.id}}",
+                                        "base": "appDmqPjgNSuIIEde",
+                                        "table": "tblsAiKc8odlUUeqQ",
+                                        "record": {
+                                            "fldOQmPFJFA6Ae7el": "Error"
+                                        },
+                                        "typecast": false,
+                                        "useColumnId": false
+                                    },
+                                    "metadata": {
+                                        "designer": {
+                                            "x": 900,
+                                            "y": 300
+                                        },
+                                        "restore": {
+                                            "expect": {
+                                                "base": {
+                                                    "label": "PROPUESTAS COMERCIALES"
+                                                },
+                                                "table": {
+                                                    "label": "propuestas"
+                                                },
+                                                "record": {
+                                                    "nested": {
+                                                        "fldOQmPFJFA6Ae7el": {
+                                                            "mode": "edit"
+                                                        },
+                                                        "fldbeu16natkttOHm": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "fldcgUVduWAnPsNtg": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "fldzdxmP4NvFPGPNG": {
+                                                            "mode": "chose"
+                                                        }
+                                                    }
+                                                },
+                                                "typecast": {
+                                                    "mode": "chose"
+                                                },
+                                                "useColumnId": {
+                                                    "mode": "chose"
+                                                }
+                                            },
+                                            "parameters": {
+                                                "__IMTCONN__": {
+                                                    "data": {
+                                                        "scoped": "true",
+                                                        "connection": "airtable2"
+                                                    },
+                                                    "label": "Juan's Airtable Token or Key connection"
+                                                }
+                                            }
+                                        },
+                                        "parameters": [
+                                            {
+                                                "name": "__IMTCONN__",
+                                                "type": "account:airtable3,airtable2",
+                                                "label": "Connection",
+                                                "required": true
+                                            }
+                                        ],
+                                        "expect": [
+                                            {
+                                                "name": "base",
+                                                "type": "select",
+                                                "label": "Base",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "typecast",
+                                                "type": "boolean",
+                                                "label": "Smart links",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "useColumnId",
+                                                "type": "boolean",
+                                                "label": "Use Column ID",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "table",
+                                                "type": "select",
+                                                "label": "Table",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "id",
+                                                "type": "text",
+                                                "label": "Record ID",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "record",
+                                                "spec": [
+                                                    {
+                                                        "name": "fldpySe6BFlX3uFmR",
+                                                        "type": "text",
+                                                        "label": "Name"
+                                                    },
+                                                    {
+                                                        "name": "fldcgUVduWAnPsNtg",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Clientes"
+                                                    },
+                                                    {
+                                                        "name": "fldbeu16natkttOHm",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "CATALOGO DE SERVICIOS"
+                                                    },
+                                                    {
+                                                        "name": "fldyrK53FRz87JC8x",
+                                                        "type": "text",
+                                                        "label": "Descipcion del proyecto"
+                                                    },
+                                                    {
+                                                        "mode": "edit",
+                                                        "name": "fldOQmPFJFA6Ae7el",
+                                                        "type": "select",
+                                                        "label": "Estado"
+                                                    },
+                                                    {
+                                                        "name": "fld0rPLKzPO5d6Xar",
+                                                        "type": "text",
+                                                        "label": "Propuesta generada"
+                                                    },
+                                                    {
+                                                        "name": "fldmNfvKUlTQzTI0Z",
+                                                        "type": "text",
+                                                        "label": "Thread ID"
+                                                    },
+                                                    {
+                                                        "name": "fldzdxmP4NvFPGPNG",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "LOG DE ERRORES"
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Record"
+                                            }
+                                        ],
+                                        "interface": [
+                                            {
+                                                "name": "id",
+                                                "type": "text",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "createdTime",
+                                                "type": "date",
+                                                "label": "Created Time"
+                                            },
+                                            {
+                                                "name": "Name",
+                                                "type": "text",
+                                                "label": "Name"
+                                            },
+                                            {
+                                                "name": "Clientes",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Clientes"
+                                            },
+                                            {
+                                                "name": "CATALOGO DE SERVICIOS",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "CATALOGO DE SERVICIOS"
+                                            },
+                                            {
+                                                "name": "Descipcion del proyecto",
+                                                "type": "text",
+                                                "label": "Descipcion del proyecto",
+                                                "multiline": true
+                                            },
+                                            {
+                                                "name": "Estado",
+                                                "type": "text",
+                                                "label": "Estado"
+                                            },
+                                            {
+                                                "name": "Propuesta generada",
+                                                "type": "text",
+                                                "label": "Propuesta generada",
+                                                "multiline": true
+                                            },
+                                            {
+                                                "name": "Thread ID",
+                                                "type": "text",
+                                                "label": "Thread ID"
+                                            },
+                                            {
+                                                "name": "Fecha de creación",
+                                                "type": "date",
+                                                "label": "Fecha de creación"
+                                            },
+                                            {
+                                                "name": "LOG DE ERRORES",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "LOG DE ERRORES"
+                                            },
+                                            {
+                                                "name": "Lookup para Empresa",
+                                                "type": "array",
+                                                "label": "Lookup para Empresa"
+                                            },
+                                            {
+                                                "name": "Lookup para Industria",
+                                                "type": "array",
+                                                "label": "Lookup para Industria"
+                                            },
+                                            {
+                                                "name": "Lookup para Email",
+                                                "type": "array",
+                                                "label": "Lookup para Email"
+                                            },
+                                            {
+                                                "name": " Lookup para Descripcion del servicio",
+                                                "type": "array",
+                                                "label": " Lookup para Descripcion del servicio"
+                                            },
+                                            {
+                                                "name": "Lookup para Precio",
+                                                "type": "array",
+                                                "label": "Lookup para Precio"
+                                            },
+                                            {
+                                                "name": "Lookup para el Nombre del cliente",
+                                                "type": "array",
+                                                "label": "Lookup para el Nombre del cliente"
+                                            },
+                                            {
+                                                "name": "Lookup para el Nombre del servicio",
+                                                "type": "array",
+                                                "label": "Lookup para el Nombre del servicio"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "id": 13,
+                                    "module": "airtable:ActionCreateRecord",
+                                    "version": 3,
+                                    "parameters": {
+                                        "__IMTCONN__": 10177737
+                                    },
+                                    "mapper": {
+                                        "base": "appDmqPjgNSuIIEde",
+                                        "table": "tblXjqdlDlpcw9OZU",
+                                        "record": {
+                                            "fld3rB4uYVT5G7rm4": [
+                                                "{{2.id}}"
+                                            ],
+                                            "fldQ3zPhyraOCzCKt": "OpenAI - Generacion de propuesta",
+                                            "fldcXsZDGjZP5LfRh": "Fallo la llamada a la API de OpenAI"
+                                        },
+                                        "typecast": false,
+                                        "useColumnId": false
+                                    },
+                                    "metadata": {
+                                        "designer": {
+                                            "x": 1200,
+                                            "y": 300
+                                        },
+                                        "restore": {
+                                            "expect": {
+                                                "base": {
+                                                    "label": "PROPUESTAS COMERCIALES"
+                                                },
+                                                "table": {
+                                                    "label": "LOG DE ERRORES",
+                                                    "nested": [
+                                                        {
+                                                            "name": "record",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "fld1eEbeFwxCF8L82",
+                                                                    "type": "text",
+                                                                    "label": "Name"
+                                                                },
+                                                                {
+                                                                    "name": "fld4A7jVCp1KMEOBV",
+                                                                    "time": false,
+                                                                    "type": "date",
+                                                                    "label": "Fecha"
+                                                                },
+                                                                {
+                                                                    "name": "fld3rB4uYVT5G7rm4",
+                                                                    "spec": {
+                                                                        "label": "Record ID"
+                                                                    },
+                                                                    "type": "array",
+                                                                    "label": "Solicitud relacionada"
+                                                                },
+                                                                {
+                                                                    "name": "fldQ3zPhyraOCzCKt",
+                                                                    "type": "text",
+                                                                    "label": "Modulo de fallo"
+                                                                },
+                                                                {
+                                                                    "name": "fldcXsZDGjZP5LfRh",
+                                                                    "type": "text",
+                                                                    "label": "Mensaje de error",
+                                                                    "multiline": true
+                                                                }
+                                                            ],
+                                                            "type": "collection",
+                                                            "label": "Record"
+                                                        }
+                                                    ]
+                                                },
+                                                "record": {
+                                                    "nested": {
+                                                        "fld3rB4uYVT5G7rm4": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "typecast": {
+                                                    "mode": "chose"
+                                                },
+                                                "useColumnId": {
+                                                    "mode": "chose"
+                                                }
+                                            },
+                                            "parameters": {
+                                                "__IMTCONN__": {
+                                                    "data": {
+                                                        "scoped": "true",
+                                                        "connection": "airtable2"
+                                                    },
+                                                    "label": "Juan's Airtable Token or Key connection"
+                                                }
+                                            }
+                                        },
+                                        "parameters": [
+                                            {
+                                                "name": "__IMTCONN__",
+                                                "type": "account:airtable3,airtable2",
+                                                "label": "Connection",
+                                                "required": true
+                                            }
+                                        ],
+                                        "expect": [
+                                            {
+                                                "name": "base",
+                                                "type": "select",
+                                                "label": "Base",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "typecast",
+                                                "type": "boolean",
+                                                "label": "Smart links",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "useColumnId",
+                                                "type": "boolean",
+                                                "label": "Use Column ID",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "table",
+                                                "type": "select",
+                                                "label": "Table",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "record",
+                                                "spec": [
+                                                    {
+                                                        "name": "fld1eEbeFwxCF8L82",
+                                                        "type": "text",
+                                                        "label": "Name"
+                                                    },
+                                                    {
+                                                        "name": "fld4A7jVCp1KMEOBV",
+                                                        "time": false,
+                                                        "type": "date",
+                                                        "label": "Fecha"
+                                                    },
+                                                    {
+                                                        "name": "fld3rB4uYVT5G7rm4",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Solicitud relacionada"
+                                                    },
+                                                    {
+                                                        "name": "fldQ3zPhyraOCzCKt",
+                                                        "type": "text",
+                                                        "label": "Modulo de fallo"
+                                                    },
+                                                    {
+                                                        "name": "fldcXsZDGjZP5LfRh",
+                                                        "type": "text",
+                                                        "label": "Mensaje de error"
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Record"
+                                            }
+                                        ],
+                                        "interface": [
+                                            {
+                                                "name": "id",
+                                                "type": "text",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "createdTime",
+                                                "type": "date",
+                                                "label": "Created Time"
+                                            },
+                                            {
+                                                "name": "Name",
+                                                "type": "text",
+                                                "label": "Name"
+                                            },
+                                            {
+                                                "name": "Fecha",
+                                                "time": false,
+                                                "type": "date",
+                                                "label": "Fecha"
+                                            },
+                                            {
+                                                "name": "Solicitud relacionada",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Solicitud relacionada"
+                                            },
+                                            {
+                                                "name": "Modulo de fallo",
+                                                "type": "text",
+                                                "label": "Modulo de fallo"
+                                            },
+                                            {
+                                                "name": "Mensaje de error",
+                                                "type": "text",
+                                                "label": "Mensaje de error",
+                                                "multiline": true
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "id": 14,
+                                    "module": "builtin:Resume",
+                                    "version": 1,
+                                    "parameters": {},
+                                    "mapper": {
+                                        "id": "",
+                                        "model": "",
+                                        "usage": {
+                                            "total_tokens": "",
+                                            "prompt_tokens": "",
+                                            "completion_tokens": "",
+                                            "prompt_tokens_details": {
+                                                "text_tokens": "",
+                                                "audio_tokens": "",
+                                                "image_tokens": "",
+                                                "cached_tokens": ""
+                                            },
+                                            "completion_tokens_details": {
+                                                "text_tokens": "",
+                                                "audio_tokens": "",
+                                                "reasoning_tokens": "",
+                                                "accepted_prediction_tokens": "",
+                                                "rejected_prediction_tokens": ""
+                                            }
+                                        },
+                                        "object": "",
+                                        "result": "",
+                                        "choices": [],
+                                        "created": "",
+                                        "service_tier": "",
+                                        "system_fingerprint": ""
+                                    },
+                                    "metadata": {
+                                        "designer": {
+                                            "x": 1500,
+                                            "y": 300
+                                        },
+                                        "restore": {
+                                            "expect": {
+                                                "choices": {
+                                                    "mode": "chose"
+                                                }
+                                            }
+                                        },
+                                        "expect": [
+                                            {
+                                                "name": "result",
+                                                "type": "any",
+                                                "label": "Result"
+                                            },
+                                            {
+                                                "name": "id",
+                                                "type": "text",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "object",
+                                                "type": "text",
+                                                "label": "Object"
+                                            },
+                                            {
+                                                "name": "created",
+                                                "type": "date",
+                                                "label": "Created"
+                                            },
+                                            {
+                                                "name": "model",
+                                                "type": "text",
+                                                "label": "Model"
+                                            },
+                                            {
+                                                "name": "choices",
+                                                "spec": [
+                                                    {
+                                                        "name": "text",
+                                                        "type": "text",
+                                                        "label": "Text"
+                                                    },
+                                                    {
+                                                        "name": "index",
+                                                        "type": "number",
+                                                        "label": "Index"
+                                                    },
+                                                    {
+                                                        "name": "logprobs",
+                                                        "type": "text",
+                                                        "label": "Log Probs"
+                                                    },
+                                                    {
+                                                        "name": "finish_reason",
+                                                        "type": "text",
+                                                        "label": "Finish Reason"
+                                                    },
+                                                    {
+                                                        "name": "message",
+                                                        "spec": [
+                                                            {
+                                                                "name": "role",
+                                                                "type": "text",
+                                                                "label": "Role"
+                                                            },
+                                                            {
+                                                                "name": "content",
+                                                                "type": "text",
+                                                                "label": "Content"
+                                                            },
+                                                            {
+                                                                "name": "tool_calls",
+                                                                "spec": [
+                                                                    {
+                                                                        "name": "id",
+                                                                        "type": "text",
+                                                                        "label": "ID"
+                                                                    },
+                                                                    {
+                                                                        "name": "type",
+                                                                        "type": "text",
+                                                                        "label": "Type"
+                                                                    },
+                                                                    {
+                                                                        "name": "function",
+                                                                        "spec": [
+                                                                            {
+                                                                                "name": "name",
+                                                                                "type": "text",
+                                                                                "label": "Name"
+                                                                            },
+                                                                            {
+                                                                                "name": "arguments",
+                                                                                "type": "text",
+                                                                                "label": "Arguments"
+                                                                            }
+                                                                        ],
+                                                                        "type": "collection",
+                                                                        "label": "Function"
+                                                                    }
+                                                                ],
+                                                                "type": "array",
+                                                                "label": "Tool Calls"
+                                                            },
+                                                            {
+                                                                "name": "refusal",
+                                                                "type": "text",
+                                                                "label": "Refusal"
+                                                            },
+                                                            {
+                                                                "name": "annotations",
+                                                                "spec": [
+                                                                    {
+                                                                        "name": "type",
+                                                                        "type": "text",
+                                                                        "label": "Type"
+                                                                    },
+                                                                    {
+                                                                        "name": "url_citation",
+                                                                        "spec": [
+                                                                            {
+                                                                                "name": "end_index",
+                                                                                "type": "number",
+                                                                                "label": "End Index"
+                                                                            },
+                                                                            {
+                                                                                "name": "start_index",
+                                                                                "type": "number",
+                                                                                "label": "Start Index"
+                                                                            },
+                                                                            {
+                                                                                "name": "title",
+                                                                                "type": "text",
+                                                                                "label": "Title"
+                                                                            },
+                                                                            {
+                                                                                "name": "url",
+                                                                                "type": "text",
+                                                                                "label": "URL"
+                                                                            }
+                                                                        ],
+                                                                        "type": "collection",
+                                                                        "label": "URL Citation"
+                                                                    }
+                                                                ],
+                                                                "type": "array",
+                                                                "label": "Annotations"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Message"
+                                                    }
+                                                ],
+                                                "type": "array",
+                                                "label": "Choices"
+                                            },
+                                            {
+                                                "name": "usage",
+                                                "spec": [
+                                                    {
+                                                        "name": "prompt_tokens",
+                                                        "type": "number",
+                                                        "label": "Prompt Tokens"
+                                                    },
+                                                    {
+                                                        "name": "completion_tokens",
+                                                        "type": "text",
+                                                        "label": "Completion Tokens"
+                                                    },
+                                                    {
+                                                        "name": "total_tokens",
+                                                        "type": "number",
+                                                        "label": "Total Tokens"
+                                                    },
+                                                    {
+                                                        "name": "prompt_tokens_details",
+                                                        "spec": [
+                                                            {
+                                                                "name": "cached_tokens",
+                                                                "type": "uinteger",
+                                                                "label": "Cached Tokens"
+                                                            },
+                                                            {
+                                                                "name": "text_tokens",
+                                                                "type": "uinteger",
+                                                                "label": "Text Tokens"
+                                                            },
+                                                            {
+                                                                "name": "image_tokens",
+                                                                "type": "uinteger",
+                                                                "label": "Image Tokens"
+                                                            },
+                                                            {
+                                                                "name": "audio_tokens",
+                                                                "type": "uinteger",
+                                                                "label": "Audio Tokens"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Prompt Tokens Details"
+                                                    },
+                                                    {
+                                                        "name": "completion_tokens_details",
+                                                        "spec": [
+                                                            {
+                                                                "name": "reasoning_tokens",
+                                                                "type": "uinteger",
+                                                                "label": "Reasoning Tokens"
+                                                            },
+                                                            {
+                                                                "name": "text_tokens",
+                                                                "type": "uinteger",
+                                                                "label": "Text Tokens"
+                                                            },
+                                                            {
+                                                                "name": "audio_tokens",
+                                                                "type": "uinteger",
+                                                                "label": "Audio Tokens"
+                                                            },
+                                                            {
+                                                                "name": "accepted_prediction_tokens",
+                                                                "type": "uinteger",
+                                                                "label": "Accepted Prediction Tokens"
+                                                            },
+                                                            {
+                                                                "name": "rejected_prediction_tokens",
+                                                                "type": "uinteger",
+                                                                "label": "Rejected Prediction Tokens"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Completion Tokens Details"
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Usage"
+                                            },
+                                            {
+                                                "name": "service_tier",
+                                                "type": "text",
+                                                "label": "Service Tier"
+                                            },
+                                            {
+                                                "name": "system_fingerprint",
+                                                "type": "text",
+                                                "label": "System Fingerprint"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": 7,
+                            "module": "airtable:ActionUpdateRecords",
+                            "version": 3,
+                            "parameters": {
+                                "__IMTCONN__": 10177737
+                            },
+                            "mapper": {
+                                "id": "{{2.id}}",
+                                "base": "appDmqPjgNSuIIEde",
+                                "table": "tblsAiKc8odlUUeqQ",
+                                "record": {
+                                    "fld0rPLKzPO5d6Xar": "{{5.choices[].message.content}}",
+                                    "fldOQmPFJFA6Ae7el": "Procesado Por IA"
+                                },
+                                "typecast": false,
+                                "useColumnId": false
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "base": {
+                                            "label": "PROPUESTAS COMERCIALES"
+                                        },
+                                        "table": {
+                                            "label": "propuestas"
+                                        },
+                                        "record": {
+                                            "nested": {
+                                                "fldOQmPFJFA6Ae7el": {
+                                                    "mode": "edit"
+                                                },
+                                                "fldbeu16natkttOHm": {
+                                                    "mode": "chose"
+                                                },
+                                                "fldcgUVduWAnPsNtg": {
+                                                    "mode": "chose"
+                                                },
+                                                "fldzdxmP4NvFPGPNG": {
+                                                    "mode": "chose"
+                                                }
+                                            }
+                                        },
+                                        "typecast": {
+                                            "mode": "chose"
+                                        },
+                                        "useColumnId": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "airtable2"
+                                            },
+                                            "label": "Juan's Airtable Token or Key connection"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:airtable3,airtable2",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "base",
+                                        "type": "select",
+                                        "label": "Base",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "typecast",
+                                        "type": "boolean",
+                                        "label": "Smart links",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useColumnId",
+                                        "type": "boolean",
+                                        "label": "Use Column ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "table",
+                                        "type": "select",
+                                        "label": "Table",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "Record ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "record",
+                                        "spec": [
+                                            {
+                                                "name": "fldpySe6BFlX3uFmR",
+                                                "type": "text",
+                                                "label": "Name"
+                                            },
+                                            {
+                                                "name": "fldcgUVduWAnPsNtg",
+                                                "spec": {
+                                                    "name": "value",
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Clientes"
+                                            },
+                                            {
+                                                "name": "fldbeu16natkttOHm",
+                                                "spec": {
+                                                    "name": "value",
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "CATALOGO DE SERVICIOS"
+                                            },
+                                            {
+                                                "name": "fldyrK53FRz87JC8x",
+                                                "type": "text",
+                                                "label": "Descipcion del proyecto"
+                                            },
+                                            {
+                                                "mode": "edit",
+                                                "name": "fldOQmPFJFA6Ae7el",
+                                                "type": "select",
+                                                "label": "Estado"
+                                            },
+                                            {
+                                                "name": "fld0rPLKzPO5d6Xar",
+                                                "type": "text",
+                                                "label": "Propuesta generada"
+                                            },
+                                            {
+                                                "name": "fldmNfvKUlTQzTI0Z",
+                                                "type": "text",
+                                                "label": "Thread ID"
+                                            },
+                                            {
+                                                "name": "fldzdxmP4NvFPGPNG",
+                                                "spec": {
+                                                    "name": "value",
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "LOG DE ERRORES"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Record"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "createdTime",
+                                        "type": "date",
+                                        "label": "Created Time"
+                                    },
+                                    {
+                                        "name": "Name",
+                                        "type": "text",
+                                        "label": "Name"
+                                    },
+                                    {
+                                        "name": "Clientes",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Clientes"
+                                    },
+                                    {
+                                        "name": "CATALOGO DE SERVICIOS",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "CATALOGO DE SERVICIOS"
+                                    },
+                                    {
+                                        "name": "Descipcion del proyecto",
+                                        "type": "text",
+                                        "label": "Descipcion del proyecto",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "Estado",
+                                        "type": "text",
+                                        "label": "Estado"
+                                    },
+                                    {
+                                        "name": "Propuesta generada",
+                                        "type": "text",
+                                        "label": "Propuesta generada",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "Thread ID",
+                                        "type": "text",
+                                        "label": "Thread ID"
+                                    },
+                                    {
+                                        "name": "Fecha de creación",
+                                        "type": "date",
+                                        "label": "Fecha de creación"
+                                    },
+                                    {
+                                        "name": "LOG DE ERRORES",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "LOG DE ERRORES"
+                                    },
+                                    {
+                                        "name": "Lookup para Empresa",
+                                        "type": "array",
+                                        "label": "Lookup para Empresa"
+                                    },
+                                    {
+                                        "name": "Lookup para Industria",
+                                        "type": "array",
+                                        "label": "Lookup para Industria"
+                                    },
+                                    {
+                                        "name": "Lookup para Email",
+                                        "type": "array",
+                                        "label": "Lookup para Email"
+                                    },
+                                    {
+                                        "name": " Lookup para Descripcion del servicio",
+                                        "type": "array",
+                                        "label": " Lookup para Descripcion del servicio"
+                                    },
+                                    {
+                                        "name": "Lookup para Precio",
+                                        "type": "array",
+                                        "label": "Lookup para Precio"
+                                    },
+                                    {
+                                        "name": "Lookup para el Nombre del cliente",
+                                        "type": "array",
+                                        "label": "Lookup para el Nombre del cliente"
+                                    },
+                                    {
+                                        "name": "Lookup para el Nombre del servicio",
+                                        "type": "array",
+                                        "label": "Lookup para el Nombre del servicio"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 16,
+                            "module": "google-email:sendAnEmail",
+                            "version": 4,
+                            "parameters": {
+                                "__IMTCONN__": 10038050
+                            },
+                            "mapper": {
+                                "to": [
+                                    "rumasjuan@gmail.com"
+                                ],
+                                "subject": "Nueva propuesta para aprobar {{7.`Lookup para el Nombre del cliente`}}",
+                                "bodyType": "collection",
+                                "contents": [
+                                    {
+                                        "text": " Se genero una propuesta nueva que necesita tu aprobacion.\n\nCliente: {{7.`Lookup para el Nombre del cliente`}}\nPropuesta Generada:{{5.choices[].message.content}}\n\nPara aprobar o rechazar, entra a Airtable y cambia el campo Estado de este registro a 'Aprobado' o 'Rechazado'.",
+                                        "image": {}
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "cc": {
+                                            "mode": "chose"
+                                        },
+                                        "to": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        },
+                                        "bcc": {
+                                            "mode": "chose"
+                                        },
+                                        "from": {
+                                            "mode": "chose"
+                                        },
+                                        "bodyType": {
+                                            "label": "Collection of contents (text, images, etc.)"
+                                        },
+                                        "contents": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        },
+                                        "signature": {
+                                            "mode": "chose"
+                                        },
+                                        "attachments": {
+                                            "mode": "chose"
+                                        },
+                                        "emailHeaders": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "google-email"
+                                            },
+                                            "label": "My Gmail connection (rumas.juan@gmail.com)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:google-email",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "to",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "email",
+                                            "label": "Recipient email address",
+                                            "required": true,
+                                            "validate": true
+                                        },
+                                        "type": "array",
+                                        "label": "To",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "subject",
+                                        "type": "text",
+                                        "label": "Subject"
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "rawHtml",
+                                                "collection"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "attachments",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "filename",
+                                                    "type": "filename",
+                                                    "label": "File name",
+                                                    "required": true,
+                                                    "semantic": "file:name"
+                                                },
+                                                {
+                                                    "name": "data",
+                                                    "type": "buffer",
+                                                    "label": "Data",
+                                                    "required": true,
+                                                    "semantic": "file:data"
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Attachment"
+                                        },
+                                        "type": "array",
+                                        "label": "Attachments"
+                                    },
+                                    {
+                                        "name": "from",
+                                        "type": "select",
+                                        "label": "From"
+                                    },
+                                    {
+                                        "name": "cc",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "email",
+                                            "label": "Recipient email address"
+                                        },
+                                        "type": "array",
+                                        "label": "CC recipients"
+                                    },
+                                    {
+                                        "name": "bcc",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "email",
+                                            "label": "Recipient email address"
+                                        },
+                                        "type": "array",
+                                        "label": "BCC recipients"
+                                    },
+                                    {
+                                        "name": "emailHeaders",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "key",
+                                                    "type": "text",
+                                                    "label": "Key",
+                                                    "required": true
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Value"
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Email header"
+                                        },
+                                        "type": "array",
+                                        "label": "Additional email headers"
+                                    },
+                                    {
+                                        "name": "contents",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "text",
+                                                    "type": "text",
+                                                    "label": "Text"
+                                                },
+                                                {
+                                                    "name": "image",
+                                                    "spec": [
+                                                        {
+                                                            "name": "filename",
+                                                            "type": "filename",
+                                                            "label": "File name",
+                                                            "semantic": "file:name"
+                                                        },
+                                                        {
+                                                            "name": "data",
+                                                            "type": "buffer",
+                                                            "label": "Data",
+                                                            "semantic": "file:data"
+                                                        },
+                                                        {
+                                                            "name": "width",
+                                                            "type": "uinteger",
+                                                            "label": "Width"
+                                                        },
+                                                        {
+                                                            "name": "height",
+                                                            "type": "uinteger",
+                                                            "label": "Height"
+                                                        }
+                                                    ],
+                                                    "type": "collection",
+                                                    "label": "Image"
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Content"
+                                        },
+                                        "type": "array",
+                                        "label": "Body contents"
+                                    },
+                                    {
+                                        "name": "signature",
+                                        "type": "select",
+                                        "label": "Signature content"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 17,
+                            "module": "airtable:ActionUpdateRecords",
+                            "version": 3,
+                            "parameters": {
+                                "__IMTCONN__": 10177737
+                            },
+                            "mapper": {
+                                "id": "{{2.id}}",
+                                "base": "appDmqPjgNSuIIEde",
+                                "table": "tblsAiKc8odlUUeqQ",
+                                "record": {
+                                    "fldOQmPFJFA6Ae7el": "Esperando Aprobacion"
+                                },
+                                "typecast": false,
+                                "useColumnId": false
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "base": {
+                                            "label": "PROPUESTAS COMERCIALES"
+                                        },
+                                        "table": {
+                                            "label": "propuestas"
+                                        },
+                                        "record": {
+                                            "nested": {
+                                                "fldOQmPFJFA6Ae7el": {
+                                                    "mode": "edit"
+                                                },
+                                                "fldbeu16natkttOHm": {
+                                                    "mode": "chose"
+                                                },
+                                                "fldcgUVduWAnPsNtg": {
+                                                    "mode": "chose"
+                                                },
+                                                "fldzdxmP4NvFPGPNG": {
+                                                    "mode": "chose"
+                                                }
+                                            }
+                                        },
+                                        "typecast": {
+                                            "mode": "chose"
+                                        },
+                                        "useColumnId": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "airtable2"
+                                            },
+                                            "label": "Juan's Airtable Token or Key connection"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:airtable3,airtable2",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "base",
+                                        "type": "select",
+                                        "label": "Base",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "typecast",
+                                        "type": "boolean",
+                                        "label": "Smart links",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useColumnId",
+                                        "type": "boolean",
+                                        "label": "Use Column ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "table",
+                                        "type": "select",
+                                        "label": "Table",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "Record ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "record",
+                                        "spec": [
+                                            {
+                                                "name": "fldpySe6BFlX3uFmR",
+                                                "type": "text",
+                                                "label": "Name"
+                                            },
+                                            {
+                                                "name": "fldcgUVduWAnPsNtg",
+                                                "spec": {
+                                                    "name": "value",
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Clientes"
+                                            },
+                                            {
+                                                "name": "fldbeu16natkttOHm",
+                                                "spec": {
+                                                    "name": "value",
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "CATALOGO DE SERVICIOS"
+                                            },
+                                            {
+                                                "name": "fldyrK53FRz87JC8x",
+                                                "type": "text",
+                                                "label": "Descipcion del proyecto"
+                                            },
+                                            {
+                                                "mode": "edit",
+                                                "name": "fldOQmPFJFA6Ae7el",
+                                                "type": "select",
+                                                "label": "Estado"
+                                            },
+                                            {
+                                                "name": "fld0rPLKzPO5d6Xar",
+                                                "type": "text",
+                                                "label": "Propuesta generada"
+                                            },
+                                            {
+                                                "name": "fldmNfvKUlTQzTI0Z",
+                                                "type": "text",
+                                                "label": "Thread ID"
+                                            },
+                                            {
+                                                "name": "fldzdxmP4NvFPGPNG",
+                                                "spec": {
+                                                    "name": "value",
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "LOG DE ERRORES"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Record"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "createdTime",
+                                        "type": "date",
+                                        "label": "Created Time"
+                                    },
+                                    {
+                                        "name": "Name",
+                                        "type": "text",
+                                        "label": "Name"
+                                    },
+                                    {
+                                        "name": "Clientes",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Clientes"
+                                    },
+                                    {
+                                        "name": "CATALOGO DE SERVICIOS",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "CATALOGO DE SERVICIOS"
+                                    },
+                                    {
+                                        "name": "Descipcion del proyecto",
+                                        "type": "text",
+                                        "label": "Descipcion del proyecto",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "Estado",
+                                        "type": "text",
+                                        "label": "Estado"
+                                    },
+                                    {
+                                        "name": "Propuesta generada",
+                                        "type": "text",
+                                        "label": "Propuesta generada",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "Thread ID",
+                                        "type": "text",
+                                        "label": "Thread ID"
+                                    },
+                                    {
+                                        "name": "Fecha de creación",
+                                        "type": "date",
+                                        "label": "Fecha de creación"
+                                    },
+                                    {
+                                        "name": "LOG DE ERRORES",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "LOG DE ERRORES"
+                                    },
+                                    {
+                                        "name": "Lookup para Empresa",
+                                        "type": "array",
+                                        "label": "Lookup para Empresa"
+                                    },
+                                    {
+                                        "name": "Lookup para Industria",
+                                        "type": "array",
+                                        "label": "Lookup para Industria"
+                                    },
+                                    {
+                                        "name": "Lookup para Email",
+                                        "type": "array",
+                                        "label": "Lookup para Email"
+                                    },
+                                    {
+                                        "name": " Lookup para Descripcion del servicio",
+                                        "type": "array",
+                                        "label": " Lookup para Descripcion del servicio"
+                                    },
+                                    {
+                                        "name": "Lookup para Precio",
+                                        "type": "array",
+                                        "label": "Lookup para Precio"
+                                    },
+                                    {
+                                        "name": "Lookup para el Nombre del cliente",
+                                        "type": "array",
+                                        "label": "Lookup para el Nombre del cliente"
+                                    },
+                                    {
+                                        "name": "Lookup para el Nombre del servicio",
+                                        "type": "array",
+                                        "label": "Lookup para el Nombre del servicio"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 6,
+                            "module": "airtable:ActionUpdateRecords",
+                            "version": 3,
+                            "parameters": {
+                                "__IMTCONN__": 10177737
+                            },
+                            "filter": {
+                                "name": "Datos incompletos",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{2.`Descipcion del proyecto`}}",
+                                            "o": "notexist"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "a": "{{2.`CATALOGO DE SERVICIOS`}}",
+                                            "o": "notexist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "id": "{{2.id}}",
+                                "base": "appDmqPjgNSuIIEde",
+                                "table": "tblsAiKc8odlUUeqQ",
+                                "record": {
+                                    "fldOQmPFJFA6Ae7el": "Error"
+                                },
+                                "typecast": false,
+                                "useColumnId": false
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 600
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "base": {
+                                            "label": "PROPUESTAS COMERCIALES"
+                                        },
+                                        "table": {
+                                            "label": "propuestas"
+                                        },
+                                        "record": {
+                                            "nested": {
+                                                "fldOQmPFJFA6Ae7el": {
+                                                    "mode": "edit"
+                                                },
+                                                "fldbeu16natkttOHm": {
+                                                    "mode": "chose"
+                                                },
+                                                "fldcgUVduWAnPsNtg": {
+                                                    "mode": "chose"
+                                                },
+                                                "fldzdxmP4NvFPGPNG": {
+                                                    "mode": "chose"
+                                                }
+                                            }
+                                        },
+                                        "typecast": {
+                                            "mode": "chose"
+                                        },
+                                        "useColumnId": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "airtable2"
+                                            },
+                                            "label": "Juan's Airtable Token or Key connection"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:airtable3,airtable2",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "base",
+                                        "type": "select",
+                                        "label": "Base",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "typecast",
+                                        "type": "boolean",
+                                        "label": "Smart links",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useColumnId",
+                                        "type": "boolean",
+                                        "label": "Use Column ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "table",
+                                        "type": "select",
+                                        "label": "Table",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "Record ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "record",
+                                        "spec": [
+                                            {
+                                                "name": "fldpySe6BFlX3uFmR",
+                                                "type": "text",
+                                                "label": "Name"
+                                            },
+                                            {
+                                                "name": "fldcgUVduWAnPsNtg",
+                                                "spec": {
+                                                    "name": "value",
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Clientes"
+                                            },
+                                            {
+                                                "name": "fldbeu16natkttOHm",
+                                                "spec": {
+                                                    "name": "value",
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "CATALOGO DE SERVICIOS"
+                                            },
+                                            {
+                                                "name": "fldyrK53FRz87JC8x",
+                                                "type": "text",
+                                                "label": "Descipcion del proyecto"
+                                            },
+                                            {
+                                                "mode": "edit",
+                                                "name": "fldOQmPFJFA6Ae7el",
+                                                "type": "select",
+                                                "label": "Estado"
+                                            },
+                                            {
+                                                "name": "fld0rPLKzPO5d6Xar",
+                                                "type": "text",
+                                                "label": "Propuesta generada"
+                                            },
+                                            {
+                                                "name": "fldmNfvKUlTQzTI0Z",
+                                                "type": "text",
+                                                "label": "Thread ID"
+                                            },
+                                            {
+                                                "name": "fldzdxmP4NvFPGPNG",
+                                                "spec": {
+                                                    "name": "value",
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "LOG DE ERRORES"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Record"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "createdTime",
+                                        "type": "date",
+                                        "label": "Created Time"
+                                    },
+                                    {
+                                        "name": "Name",
+                                        "type": "text",
+                                        "label": "Name"
+                                    },
+                                    {
+                                        "name": "Clientes",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Clientes"
+                                    },
+                                    {
+                                        "name": "CATALOGO DE SERVICIOS",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "CATALOGO DE SERVICIOS"
+                                    },
+                                    {
+                                        "name": "Descipcion del proyecto",
+                                        "type": "text",
+                                        "label": "Descipcion del proyecto",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "Estado",
+                                        "type": "text",
+                                        "label": "Estado"
+                                    },
+                                    {
+                                        "name": "Propuesta generada",
+                                        "type": "text",
+                                        "label": "Propuesta generada",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "Thread ID",
+                                        "type": "text",
+                                        "label": "Thread ID"
+                                    },
+                                    {
+                                        "name": "Fecha de creación",
+                                        "type": "date",
+                                        "label": "Fecha de creación"
+                                    },
+                                    {
+                                        "name": "LOG DE ERRORES",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "LOG DE ERRORES"
+                                    },
+                                    {
+                                        "name": "Lookup para Empresa",
+                                        "type": "array",
+                                        "label": "Lookup para Empresa"
+                                    },
+                                    {
+                                        "name": "Lookup para Industria",
+                                        "type": "array",
+                                        "label": "Lookup para Industria"
+                                    },
+                                    {
+                                        "name": "Lookup para Email",
+                                        "type": "array",
+                                        "label": "Lookup para Email"
+                                    },
+                                    {
+                                        "name": " Lookup para Descripcion del servicio",
+                                        "type": "array",
+                                        "label": " Lookup para Descripcion del servicio"
+                                    },
+                                    {
+                                        "name": "Lookup para Precio",
+                                        "type": "array",
+                                        "label": "Lookup para Precio"
+                                    },
+                                    {
+                                        "name": "Lookup para el Nombre del cliente",
+                                        "type": "array",
+                                        "label": "Lookup para el Nombre del cliente"
+                                    },
+                                    {
+                                        "name": "Lookup para el Nombre del servicio",
+                                        "type": "array",
+                                        "label": "Lookup para el Nombre del servicio"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 15,
+                            "module": "airtable:ActionCreateRecord",
+                            "version": 3,
+                            "parameters": {
+                                "__IMTCONN__": 10177737
+                            },
+                            "mapper": {
+                                "base": "appDmqPjgNSuIIEde",
+                                "table": "tblXjqdlDlpcw9OZU",
+                                "record": {
+                                    "fld1eEbeFwxCF8L82": "{{2.id}}",
+                                    "fldQ3zPhyraOCzCKt": "Validación de datos",
+                                    "fldcXsZDGjZP5LfRh": "Faltan datos obligatorios en la solicitud (descripcion del proyecto vacia)"
+                                },
+                                "typecast": false,
+                                "useColumnId": false
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 600
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "base": {
+                                            "label": "PROPUESTAS COMERCIALES"
+                                        },
+                                        "table": {
+                                            "label": "LOG DE ERRORES",
+                                            "nested": [
+                                                {
+                                                    "name": "record",
+                                                    "spec": [
+                                                        {
+                                                            "name": "fld1eEbeFwxCF8L82",
+                                                            "type": "text",
+                                                            "label": "Name"
+                                                        },
+                                                        {
+                                                            "name": "fld4A7jVCp1KMEOBV",
+                                                            "time": false,
+                                                            "type": "date",
+                                                            "label": "Fecha"
+                                                        },
+                                                        {
+                                                            "name": "fld3rB4uYVT5G7rm4",
+                                                            "spec": {
+                                                                "label": "Record ID"
+                                                            },
+                                                            "type": "array",
+                                                            "label": "Solicitud relacionada"
+                                                        },
+                                                        {
+                                                            "name": "fldQ3zPhyraOCzCKt",
+                                                            "type": "text",
+                                                            "label": "Modulo de fallo"
+                                                        },
+                                                        {
+                                                            "name": "fldcXsZDGjZP5LfRh",
+                                                            "type": "text",
+                                                            "label": "Mensaje de error",
+                                                            "multiline": true
+                                                        }
+                                                    ],
+                                                    "type": "collection",
+                                                    "label": "Record"
+                                                }
+                                            ]
+                                        },
+                                        "record": {
+                                            "nested": {
+                                                "fld3rB4uYVT5G7rm4": {
+                                                    "mode": "chose"
+                                                }
+                                            }
+                                        },
+                                        "typecast": {
+                                            "mode": "chose"
+                                        },
+                                        "useColumnId": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "airtable2"
+                                            },
+                                            "label": "Juan's Airtable Token or Key connection"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:airtable3,airtable2",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "base",
+                                        "type": "select",
+                                        "label": "Base",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "typecast",
+                                        "type": "boolean",
+                                        "label": "Smart links",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useColumnId",
+                                        "type": "boolean",
+                                        "label": "Use Column ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "table",
+                                        "type": "select",
+                                        "label": "Table",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "record",
+                                        "spec": [
+                                            {
+                                                "name": "fld1eEbeFwxCF8L82",
+                                                "type": "text",
+                                                "label": "Name"
+                                            },
+                                            {
+                                                "name": "fld4A7jVCp1KMEOBV",
+                                                "time": false,
+                                                "type": "date",
+                                                "label": "Fecha"
+                                            },
+                                            {
+                                                "name": "fld3rB4uYVT5G7rm4",
+                                                "spec": {
+                                                    "name": "value",
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Solicitud relacionada"
+                                            },
+                                            {
+                                                "name": "fldQ3zPhyraOCzCKt",
+                                                "type": "text",
+                                                "label": "Modulo de fallo"
+                                            },
+                                            {
+                                                "name": "fldcXsZDGjZP5LfRh",
+                                                "type": "text",
+                                                "label": "Mensaje de error"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Record"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "createdTime",
+                                        "type": "date",
+                                        "label": "Created Time"
+                                    },
+                                    {
+                                        "name": "Name",
+                                        "type": "text",
+                                        "label": "Name"
+                                    },
+                                    {
+                                        "name": "Fecha",
+                                        "time": false,
+                                        "type": "date",
+                                        "label": "Fecha"
+                                    },
+                                    {
+                                        "name": "Solicitud relacionada",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Solicitud relacionada"
+                                    },
+                                    {
+                                        "name": "Modulo de fallo",
+                                        "type": "text",
+                                        "label": "Modulo de fallo"
+                                    },
+                                    {
+                                        "name": "Mensaje de error",
+                                        "type": "text",
+                                        "label": "Mensaje de error",
+                                        "multiline": true
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us2.make.com",
+        "notes": []
+    }
+}
